@@ -1,0 +1,2 @@
+{:require [life-game.core]
+ :init-fns [life-game.core/main]}
