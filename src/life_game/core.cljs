@@ -5,6 +5,7 @@
             [reagent.core :as r :refer [atom]]
             [re-frame.core :refer [dispatch
                                    dispatch-sync
+                                   after
                                    path
                                    register-handler
                                    register-sub
@@ -41,6 +42,7 @@
 
 (register-handler
  ::initialize
+ (after #(dispatch [::randomize]))
  (fn [db _]
    (merge db initial-state)))
 
@@ -119,12 +121,12 @@
 
 (defn life-game-world []
   [:div
-   [:h1 "Life Game : " (deref (subscribe [::step]))]
+   [:span {:style {:display :block}}
+    [:h1 {:style {:display :inline}} "Life Game : " (deref (subscribe [::step]))]]
    [board]])
 
 (defn main []
   (when-let [elm (dom/get-element "life-game")]
     (dispatch-sync [::initialize])
-    (dispatch [::randomize])
     (r/render [life-game-world] elm)
     (js/setInterval #(dispatch [::tick!]) 200)))
